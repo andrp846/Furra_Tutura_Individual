@@ -24,7 +24,8 @@ class Pile(InterfacePile):
         selectedCard = self.getCard(index)
         if selectedCard is not None:
             self._visibleCards.remove(selectedCard)
-            self._visibleCards.insert(0, self._hiddenCards.pop())
+            if len(self._hiddenCards) > 0:
+                self._visibleCards.insert(0, self._hiddenCards.pop())
         return None
 
     def removeLastCard(self) -> None:

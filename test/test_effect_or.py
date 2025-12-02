@@ -1,9 +1,6 @@
 # test_effect_or.py
 from typing import List
 from dataclasses import dataclass
-
-import pytest
-
 from terra_futura.interfaces import Resource, Effect
 from terra_futura.effect_or import EffectOr
 from terra_futura.arbitrary_basic import ArbitraryBasic

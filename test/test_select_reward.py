@@ -6,6 +6,7 @@ from terra_futura.interfaces import InterfaceCard
 from terra_futura.select_reward import SelectReward
 import json
 
+
 class TestSelectReward:
     def test_select_reward(self) -> None:
         card_mock = Mock(spec=InterfaceCard)

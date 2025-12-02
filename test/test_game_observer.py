@@ -2,8 +2,6 @@ from terra_futura.game_observer import GameObserver
 from terra_futura.interfaces import TerraFuturaObserverInterface
 from typing import List
 
-
-
 class DummyObserver(TerraFuturaObserverInterface):
     """
     Simple test double that collects all states passed to notify().

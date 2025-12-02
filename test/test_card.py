@@ -1,6 +1,5 @@
 # test_card.py
 from collections import Counter
-from dataclasses import dataclass
 from typing import List
 
 import pytest

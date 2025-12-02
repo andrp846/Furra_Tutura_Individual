@@ -1,5 +1,3 @@
-import pytest
-
 from terra_futura.process_action import ProcessAction
 from terra_futura.card import Card
 from terra_futura.arbitrary_basic import ArbitraryBasic

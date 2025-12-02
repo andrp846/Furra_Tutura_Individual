@@ -1,6 +1,5 @@
 from __future__ import annotations
 import unittest
-from abc import abstractmethod
 
 from typing import List, Optional
 from terra_futura.simple_types import GridPosition, Resource

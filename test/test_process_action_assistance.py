@@ -1,5 +1,3 @@
-import pytest
-
 from typing import List, Optional, Dict
 from terra_futura.simple_types import Resource
 from terra_futura.simple_types import GridPosition
@@ -8,6 +6,7 @@ from terra_futura.card import Card
 from terra_futura.interfaces import InterfaceGrid, InterfaceCard, Effect
 from terra_futura.transformation_fixed import TransformationFixed
 from collections import Counter
+
 
 class DummyGrid(InterfaceGrid):
     def __init__(self, mapping: Dict[GridPosition, InterfaceCard]) -> None:

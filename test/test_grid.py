@@ -1,9 +1,6 @@
 from unittest.mock import Mock
-from terra_futura.game import Game
-from terra_futura.simple_types import Deck, GridPosition
-from terra_futura.select_reward import SelectReward
-from terra_futura.interfaces import InterfaceCard, InterfaceGrid
-from terra_futura.pile import Pile
+from terra_futura.simple_types import GridPosition
+from terra_futura.interfaces import InterfaceCard
 from terra_futura.player import Player
 from typing import cast, Any
 from terra_futura.grid import Grid
