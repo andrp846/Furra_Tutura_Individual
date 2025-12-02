@@ -112,7 +112,7 @@ class Card(InterfaceCard):
         """
         if not self.canPutResources(resources):
             raise ValueError("Cannot add resources to an inactive card.")
-        if type(resources) == Resource:
+        if isinstance(resources, Resource):
             self.resources.append(resources)
         else:
             self.resources.extend(resources)
