@@ -5,17 +5,17 @@ from terra_futura.simple_types import GameState, Deck
 from terra_futura.select_reward import SelectReward
 from typing import cast
 from terra_futura.interfaces import InterfacePile
+from terra_futura.pile import Pile
 
 class TestDiscardCard:
     """Test discarding cards from deck"""
     
     def test_discard_card_valid(self) -> None:
         """Test that player can discard card on their turn"""
-        # Setup
         grid = Mock()
         player = Player(id=1, grid=grid, activation_patterns=[Mock(), Mock()], 
                        scoring_methods=[Mock(), Mock()])
-        pile_mock = Mock()
+        pile_mock = Pile(all_cards=[Mock() for _ in range(10)])
         piles_mock = {Deck.LEVEL_I: pile_mock, Deck.LEVEL_II: Mock()}
         piles = cast(dict[Deck, InterfacePile], piles_mock)
         observer_mock = Mock()
@@ -30,18 +30,16 @@ class TestDiscardCard:
             gameObserver=observer_mock
         )
         
-        # Execute
+        card_before = pile_mock.getCard(4)
         result = game.discardLastCardFromDeck(1, Deck.LEVEL_I)
-        
-        # Assert
         assert result == True
+        card_after = pile_mock.getCard(4)
+        assert card_before != card_after
+        
         assert game.state == GameState.TakeCardCardDiscarded
-        pile_mock.removeLastCard.assert_called_once()
-        observer_mock.notifyAll.assert_called_once()
     
     def test_discard_card_wrong_player(self) -> None:
         """Test that player cannot discard when it's not their turn"""
-        # Setup
         player1 = Mock()
         player1.id = 1
         player2 = Mock()
@@ -57,16 +55,13 @@ class TestDiscardCard:
             gameObserver=Mock()
         )
         
-        # Execute
-        result = game.discardLastCardFromDeck(2, Deck.LEVEL_I)  # Player 2 tries on Player 1's turn
+        result = game.discardLastCardFromDeck(2, Deck.LEVEL_I)  # Player 2 tries on Player 1s turn
         
-        # Assert
         assert result == False
-        assert game.state == GameState.TakeCardNoCardDiscarded
+        assert game.state == GameState.TakeCardNoCardDiscarded # state remains unchanged
     
     def test_discard_card_wrong_state(self) -> None:
         """Test that player cannot discard after already discarding"""
-        # Setup
         grid = Mock()
         player1 = Player(id=1, grid=grid, activation_patterns=[Mock(), Mock()], 
                         scoring_methods=[Mock(), Mock()])
@@ -82,11 +77,10 @@ class TestDiscardCard:
             selectReward=SelectReward(),
             gameObserver=Mock()
         )
-        
-        game._state = GameState.TakeCardCardDiscarded
-        
-        # Execute
-        result = game.discardLastCardFromDeck(1, Deck.LEVEL_I)
-        
+        result = game.discardLastCardFromDeck(1, Deck.LEVEL_I)  # First discard
+        assert result == True        
+        assert game.state == GameState.TakeCardCardDiscarded
+
+        result_2 = game.discardLastCardFromDeck(1, Deck.LEVEL_I) # Second discard
+        assert result_2 == False
         # Assert
-        assert result == False

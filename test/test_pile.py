@@ -9,110 +9,42 @@ from typing import cast
 class TestPile:
     def test_pile_initialization(self) -> None:
         """Test that a pile is initialized correctly"""
-        # Setup
-        pile_mock = Mock()
-        
-        game = Game(
-            players=[Mock(), Mock()],
-            piles={Deck.LEVEL_I: pile_mock, Deck.LEVEL_II: Mock()},
-            moveCard=Mock(),
-            processAction=Mock(),
-            processActionAssistance=Mock(),
-            selectReward=SelectReward(),
-            gameObserver=Mock()
-        )
-        
-        # Assert
-        assert game._piles[Deck.LEVEL_I] == pile_mock
-
-    def test_move_card_called(self) -> None:
-        """Test that moveCard is called correctly"""
-        # Setup
-        move_card_mock = Mock()
-        pile_mock = Mock()
-        grid_mock = Mock()
-        
-        game = Game(
-            players=[Mock(), Mock()],
-            piles={Deck.LEVEL_I: pile_mock, Deck.LEVEL_II: Mock()},
-            moveCard=move_card_mock,
-            processAction=Mock(),
-            processActionAssistance=Mock(),
-            selectReward=SelectReward(),
-            gameObserver=Mock()
-        )
-        
-        # Action
-        game._moveCard.moveCard(pile_mock, 0, GridPosition(0, 0), grid_mock)
-        
-        # Assert
-        move_card_mock.moveCard.assert_called_once_with(pile_mock, 0, GridPosition(0, 0), grid_mock)
-
+        card = Mock(spec=InterfaceCard)
+        pile = Pile(all_cards=[card for _ in range(10)])
+        assert pile.getCard(1) == card
+        assert pile.getCard(2) == card
+        assert pile.getCard(4) == card
+        # 4 visible cards
+        assert pile.getCard(5) is None
+        assert pile.getCard(10) is None
+    
     def test_take_card(self) -> None:
         """Test that takeCard is called correctly"""
-        # Setup
-        card_mock = Mock(spec=InterfaceCard)
-        pile_mock = Pile(all_cards=[card_mock]*10)
-        
-        game = Game(
-            players=[Mock(), Mock()],
-            piles={Deck.LEVEL_I: pile_mock, Deck.LEVEL_II: Mock()},
-            moveCard=Mock(),
-            processAction=Mock(),
-            processActionAssistance=Mock(),
-            selectReward=SelectReward(),
-            gameObserver=Mock()
-        )
-        
-        # Action
-        assert pile_mock.getCard(1) == card_mock
+        pile_mock = Pile([Mock(spec=InterfaceCard) for _ in range(10)])
+        assert pile_mock.getCard(1) != pile_mock.getCard(2)  # Ensure different cards
+        card_before = pile_mock.getCard(1)
         pile_mock.takeCard(1)
-        assert pile_mock.getCard(1) == card_mock  # The next card should now be at index 1
+        assert pile_mock.getCard(1) != card_before
 
     def test_remove_last_card(self) -> None:
         """Test that removeLastCard works correctly"""
-        # Setup
-        card_mock = Mock(spec=InterfaceCard)
         my_cards = [Mock(spec=InterfaceCard) for _ in range(10)]
         assert my_cards[0] != my_cards[1] # theyre not just references to the same Mock objects
         all_my_cards = cast(list[InterfaceCard], my_cards)
-        pile_mock = Pile(all_cards=all_my_cards)
+        pile = Pile(all_cards=all_my_cards)
         
-        game = Game(
-            players=[Mock(), Mock()],
-            piles={Deck.LEVEL_I: pile_mock, Deck.LEVEL_II: Mock()},
-            moveCard=Mock(),
-            processAction=Mock(),
-            processActionAssistance=Mock(),
-            selectReward=SelectReward(),
-            gameObserver=Mock()
-        )
+        last_card_before = pile.getCard(4)
+        pile.removeLastCard()
+        last_card_after = pile.getCard(4)
         
-        # Action
-        last_card_before = pile_mock.getCard(4)
-        pile_mock.removeLastCard()
-        last_card_after = pile_mock.getCard(4)
-        
-        # Assert
         assert last_card_before != last_card_after  # The last card should have changed
         assert last_card_after is not None # card is replaced
 
     def test_pile_state(self) -> None:
         """Test that the state method returns a valid JSON string"""
-        # Setup
         card_mock = Mock(spec=InterfaceCard)
         card_mock.state.return_value = '{"name": "Test Card"}'
         pile_mock = Pile(all_cards=[card_mock]*10)
-        
-        game = Game(
-            players=[Mock(), Mock()],
-            piles={Deck.LEVEL_I: pile_mock, Deck.LEVEL_II: Mock()},
-            moveCard=Mock(),
-            processAction=Mock(),
-            processActionAssistance=Mock(),
-            selectReward=SelectReward(),
-            gameObserver=Mock()
-        )
         
         state_str = pile_mock.state()
         print(state_str)

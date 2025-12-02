@@ -41,13 +41,14 @@ class TestGameIntegration:
         
         # Execute full cycle
         # 1. Discard
+        assert game.state == GameState.TakeCardNoCardDiscarded
         assert game.discardLastCardFromDeck(1, Deck.LEVEL_I) == True
-        assert game.state == GameState.TakeCardCardDiscarded 
+        assert game.state == GameState.TakeCardCardDiscarded # type: ignore[comparison-overlap]
         
         # 2. Take card
         source = CardSource(deck=Deck.LEVEL_I, index=1)
         assert game.takeCard(1, source, 1, GridPosition(0, 0)) == True
-        assert game.state == GameState.ActivateCard # type: ignore[comparison-overlap]
+        assert game.state == GameState.ActivateCard
         
         # 3. Activate card
         game.activateCard(1, GridPosition(0, 0), [], [], [], None, None)
