@@ -1,5 +1,4 @@
 from typing import Dict
-from abc import ABC
 from terra_futura.interfaces import TerraFuturaObserverInterface
 from typing import Dict
 

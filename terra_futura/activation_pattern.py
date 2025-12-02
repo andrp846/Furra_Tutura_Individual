@@ -1,6 +1,6 @@
 from __future__ import annotations
 import json
-from typing import List, Tuple, Any
+from typing import List, Any
 from terra_futura.interfaces import InterfaceGrid
 from terra_futura.simple_types import GridPosition
 
