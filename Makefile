@@ -2,6 +2,7 @@ check_and_test: FORCE
 	mypy terra_futura --strict
 	mypy test --strict
 	python3 -m unittest 
+	pytest test/
 
 lint: FORCE
 	pylint terra_futura/
