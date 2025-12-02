@@ -12,7 +12,6 @@ class TestGameInitialization:
     
     def test_game_initialization_valid(self) -> None:
         """Test that game initializes correctly with valid parameters"""
-        # Setup
         grid1 = Mock()
         grid2 = Mock()
         player1 = Player(id=1, grid=grid1, activation_patterns=[Mock(), Mock()], 
@@ -28,7 +27,6 @@ class TestGameInitialization:
         select_reward = Mock()
         game_observer = Mock()
         
-        # Execute
         game = Game(
             players=[player1, player2],
             piles=piles,
@@ -39,7 +37,7 @@ class TestGameInitialization:
             gameObserver=game_observer
         )
         
-        # Assert
+
         assert game.state == GameState.TakeCardNoCardDiscarded
         assert game.turnNumber == 1
         assert game.currentPlayerId == 1

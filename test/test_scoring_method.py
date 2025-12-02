@@ -1,6 +1,6 @@
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# import sys
+# import os
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import unittest
 from terra_futura.scoring_method import ScoringMethod
@@ -37,8 +37,8 @@ class GridFake(InterfaceGrid):
             return False
         return True
 
-    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> bool:
-        return True
+    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> None:
+        pass
 
 # not used
     def canBeActivated(self, coordinate: GridPosition)-> bool:

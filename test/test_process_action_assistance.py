@@ -13,14 +13,14 @@ class DummyGrid(InterfaceGrid):
     def __init__(self, mapping: Dict[GridPosition, InterfaceCard]) -> None:
         self.mapping: Dict[GridPosition, InterfaceCard] = mapping
 
-    def getCard(self, position: GridPosition) -> Optional[InterfaceCard]:
-        return self.mapping.get(position)
+    def getCard(self, coordinate: GridPosition) -> Optional[InterfaceCard]:
+        return self.mapping.get(coordinate)
     
     def canPutCard(self, coordinate: GridPosition)-> bool:
         return True
 
-    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> bool:
-        return True
+    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> None:
+        pass
 
     def canBeActivated(self, coordinate: GridPosition)-> bool:
         return True

@@ -118,7 +118,7 @@ class InterfaceGrid(Protocol):
     def canPutCard(self, coordinate: GridPosition)-> bool:
         ...
 
-    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> bool:
+    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> None:
         ...
 
     def canBeActivated(self, coordinate: GridPosition)-> bool:
@@ -194,6 +194,10 @@ class ProcessActionAssistanceInterface(Protocol):
 
 
 class InterfaceSelectReward(Protocol):
+    @property
+    def player(self) -> int:
+        ...
+        
     def setReward(self, player: int, card: InterfaceCard, reward: List[Resource]) ->None:
         ...
     

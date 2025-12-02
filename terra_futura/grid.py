@@ -11,12 +11,11 @@ class Grid(InterfaceGrid):
     def __init__(self) -> None:
         self._cards = [[None] * 3 for _ in range(3)]
         self._cardActivations = [[False] * 3 for _ in range(3)]
-        self._startingCardPosition = GridPosition(1, 1)
+        self._startingCardPosition = GridPosition(0, 0)
 
     def _modifiedCoordinate(self, coordinate: GridPosition) -> GridPosition:
-        # turns relative coordinates into absolute coordinates
-        return GridPosition(self._startingCardPosition.x + coordinate.x,
-                            self._startingCardPosition.y + coordinate.y)
+        return GridPosition((self._startingCardPosition.x + coordinate.x) % 3,
+                            (self._startingCardPosition.y + coordinate.y) % 3)
     
     def getCard(self, coordinate: GridPosition)-> Optional[InterfaceCard]:
         absoluteCoordinate = self._modifiedCoordinate(coordinate)
@@ -28,12 +27,11 @@ class Grid(InterfaceGrid):
         # check if position is empty
         return self._cards[absoluteCoordinate.y][absoluteCoordinate.x] is None
 
-    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> bool:
+    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> None:
         absoluteCoordinate = self._modifiedCoordinate(coordinate)
         if self.canPutCard(absoluteCoordinate):
             self._cards[absoluteCoordinate.y][absoluteCoordinate.x] = card
-            return True
-        return False
+        return
 
     def canBeActivated(self, coordinate: GridPosition) -> bool:
         absoluteCoordinate = self._modifiedCoordinate(coordinate)
