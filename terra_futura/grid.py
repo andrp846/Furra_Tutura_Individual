@@ -27,12 +27,11 @@ class Grid(InterfaceGrid):
         # check if position is empty
         return self._cards[absoluteCoordinate.y][absoluteCoordinate.x] is None
 
-    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> bool:
+    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> None:
         absoluteCoordinate = self._modifiedCoordinate(coordinate)
         if self.canPutCard(absoluteCoordinate):
             self._cards[absoluteCoordinate.y][absoluteCoordinate.x] = card
-            return True
-        return False
+        return
 
     def canBeActivated(self, coordinate: GridPosition) -> bool:
         absoluteCoordinate = self._modifiedCoordinate(coordinate)
