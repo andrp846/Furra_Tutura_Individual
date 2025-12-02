@@ -1,13 +1,3 @@
-"""
-Full Integration Test for Terra Futura Game
-
-This test simulates a complete 2-player game from start to finish:
-- Card placement and activation
-- Resource management
-- Turn progression
-- Endgame (activation patterns and scoring)
-"""
-
 from terra_futura.game import Game
 from terra_futura.player import Player
 from terra_futura.grid import Grid
@@ -45,7 +35,7 @@ class TestFullGameIntegration:
     Game scenario:
     - 2 players
     - Simplified cards with production and transformation effects
-    - 2 turns per player (instead of full 9 for brevity)
+    - 2 turns per player
     - Endgame with activation patterns and scoring
     """
     
@@ -78,24 +68,6 @@ class TestFullGameIntegration:
         return Card(pollutionSpacesL=2, upperEffect=effect)
     
     def test_complete_game_flow(self) -> None:
-        """
-        Integration Test: Complete game from start to finish
-        
-        Flow:
-        1. Setup game with 2 players
-        2. Turn 1 - Player 1: Take card, activate, finish turn
-        3. Turn 1 - Player 2: Take card, activate, finish turn
-        4. Turn 2 - Player 1: Take card, activate (with production chain), finish
-        5. Turn 2 - Player 2: Take card, activate, finish
-        6. Endgame: Activation patterns
-        7. Scoring
-        """
-        
-        # ============================================================
-        # SETUP PHASE
-        # ============================================================
-        
-        # Create observers
         observer1 = GameNotificationObserver()
         observer2 = GameNotificationObserver()
         game_observer = GameObserver({1: observer1, 2: observer2})
@@ -179,9 +151,6 @@ class TestFullGameIntegration:
         # Manually set turn number to 8 (so next turns are 8 and 9)
         game._turnNumber = 8
         
-        # ============================================================
-        # TURN 8 - PLAYER 1
-        # ============================================================
         
         assert game.state == GameState.TakeCardNoCardDiscarded
         assert game.currentPlayerId == 1
@@ -194,7 +163,6 @@ class TestFullGameIntegration:
         assert game.state == GameState.ActivateCard # type: ignore[comparison-overlap]
         
         # Activate the newly placed card (produces GREEN)
-        # The card at (1,0) will activate, plus starting card at (0,0)
         game.activateCard(
             playerId=1,
             card=GridPosition(1, 0),
@@ -215,10 +183,6 @@ class TestFullGameIntegration:
         assert result == True
         assert game.state == GameState.TakeCardNoCardDiscarded
         assert game.currentPlayerId == 2  # Player 2's turn
-        
-        # ============================================================
-        # TURN 8 - PLAYER 2
-        # ============================================================
         
         # Player 2 takes a production card
         source = CardSource(deck=Deck.LEVEL_I, index=2)
@@ -241,10 +205,6 @@ class TestFullGameIntegration:
         assert result == True
         assert game.currentPlayerId == 1
         assert game.turnNumber == 9  # Now turn 9 (last regular turn)
-        
-        # ============================================================
-        # TURN 9 - PLAYER 1 (Last regular turn)
-        # ============================================================
         
         # Player 1 takes a transformation card (GREEN -> FOOD with pollution)
         source = CardSource(deck=Deck.LEVEL_II, index=1)
@@ -275,10 +235,6 @@ class TestFullGameIntegration:
         assert result == True
         assert game.currentPlayerId == 2
         
-        # ============================================================
-        # TURN 9 - PLAYER 2 (Last regular turn)
-        # ============================================================
-        
         # Player 2 takes a transformation card
         source = CardSource(deck=Deck.LEVEL_II, index=2)
         result = game.takeCard(2, source, 2, GridPosition(0, -1))
@@ -301,16 +257,12 @@ class TestFullGameIntegration:
         assert game.state == GameState.SelectActivationPattern
         assert game.currentPlayerId == 1  # Back to player 1 for endgame
         
-        # ============================================================
-        # ENDGAME - ACTIVATION PATTERNS
-        # ============================================================
-        
         # Player 1 selects activation pattern
         result = game.selectActivationPattern(1, 0)  # Select first pattern
         assert result == True
         assert game.state == GameState.ActivateCard
         
-        # Player 1 can now activate according to pattern (we'll skip detailed activation)
+        # Player 1 can now activate according to pattern
         # Finish endgame activation
         result = game.turnFinished(1)
         assert result == True
@@ -326,9 +278,6 @@ class TestFullGameIntegration:
         assert result == True
         assert game.state == GameState.SelectScoringMethod
         
-        # ============================================================
-        # SCORING
-        # ============================================================
         
         # Player 1 selects scoring method
         result = game.selectScoring(1, 0)  # Select first scoring method (FOOD)
